@@ -12,13 +12,13 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "mvn test -f test_maven/pom.xml"
+                sh "mvn test -f test_maven"
 
             }
         }
         stage('Deploy') {
             steps {
-                sh "mvn package -f test_maven/pom.xml"
+                sh "mvn package -f test_maven"
 
             }
         }
