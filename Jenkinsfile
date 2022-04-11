@@ -12,13 +12,13 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "mvn test -f test_maven"
+                sh "mvn test"
 
             }
         }
         stage('Deploy') {
             steps {
-                sh "mvn package -f test_maven"
+                sh "mvn package"
 
             }
         }
