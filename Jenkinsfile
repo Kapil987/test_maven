@@ -1,5 +1,6 @@
 pipeline {
-    agent any
+    // agent any
+    agent { label 'algoworks-dev-server' }
     stages {
         stage('mvn clean') {
             steps {
