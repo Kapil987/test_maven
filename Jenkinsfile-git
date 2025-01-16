@@ -1,0 +1,32 @@
+pipeline {
+    agent none
+    stages {
+        stage('Clone Repository') {
+            agent {
+                docker { image 'kapil0123/git' }
+            }
+            steps {
+                // git url: 'https://github.com/your-username/your-repo.git'
+                git 'https://github.com/Kapil987/test_maven.git'
+            }
+        }
+        stage('Back-end') {
+            agent {
+                docker { image 'maven:3.8.1-adoptopenjdk-11' }
+            }
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+        stage('Front-end') {
+            agent {
+                docker { image 'node:16-alpine' }
+            }
+            steps {
+                echo "last stage"
+                // sh 'npm install'
+                // sh 'npm run build'
+            }
+        }
+    }
+}
