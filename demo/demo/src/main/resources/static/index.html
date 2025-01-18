@@ -3,42 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colorful Page</title>
+    <title>Color Changing Page</title>
     <style>
         body {
-            background-color: #e0f7fa; /* Light cyan background */
-            font-family: Arial, sans-serif;
-            color: #2e3b4e; /* Dark blue text */
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #ff6f61; /* Coral color */
-        }
-        p {
-            color: #4caf50; /* Green color */
-        }
-        .button {
-            background-color: #ffcc00; /* Yellow background */
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .button:hover {
-            background-color: #ffa726; /* Orange background on hover */
+            transition: background-color 2s;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to the Colorful Page!</h1>
-    <p>This page is a burst of colors to brighten up your day.</p>
-    <a href="#" class="button">Click Me!</a>
+    <h1>Welcome to this colorful page created by Kapil</h1>
+    <script>
+        const colors = ["#FF5733", "#33FF57", "#3357FF", "#F33FFF", "#FF33A8"];
+        let index = 0;
+
+        function changeColor() {
+            document.body.style.backgroundColor = colors[index];
+            index = (index + 1) % colors.length;
+        }
+
+        setInterval(changeColor, 2000);
+    </script>
 </body>
 </html>
