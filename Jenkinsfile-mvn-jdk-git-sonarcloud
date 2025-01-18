@@ -17,16 +17,17 @@ pipeline {
                 
                 
                 
-                sh '''
-                mvn -f demo/demo/pom.xml verify package sonar:sonar \
-                -Dsonar.host.url=https://sonarcloud.io/ \
-                -Dsonar.organization=demo-987 \
-                -Dsonar.projectKey=demo-987_demo-name \
-                -Dsonar.login=$SONAR_TOKEN
-                '''
+                // sh '''
+                // mvn -f demo/demo/pom.xml verify package sonar:sonar \
+                // -Dsonar.host.url=https://sonarcloud.io/ \
+                // -Dsonar.organization=demo-987 \
+                // -Dsonar.projectKey=demo-987_demo-name \
+                // -Dsonar.login=$SONAR_TOKEN
+                // '''
 
                 sh 'cp /var/lib/jenkins/workspace/docker-tomcat/demo/demo/target/*.war .'
-                
+                sh 'ls -l'
+
                 sh''' 
                 cat Dockerfile.tomcat
                 docker build -f Dockerfile.tomcate -t my-tomcat-app .
