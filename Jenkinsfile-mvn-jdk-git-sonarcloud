@@ -5,7 +5,11 @@ pipeline {
         jdk 'jdk21'
         maven 'mvn-3.9'
     }
-    environment { SONAR_TOKEN = credentials('sonar_token') }
+    environment { 
+        SONAR_TOKEN = credentials('sonar_token') 
+        DOCKER_IMAGE_NAME = 'kapil0123/my-tomcat-app'
+        DOCKER_CONTAINER_NAME = 'my-tomcat-app'
+    }
     stages {
         stage('Clone Repository') {
             steps {
@@ -15,8 +19,6 @@ pipeline {
                 
                 sh 'ls -l'
                 
-                
-                
                 // sh '''
                 // mvn -f demo/demo/pom.xml verify package sonar:sonar \
                 // -Dsonar.host.url=https://sonarcloud.io/ \
@@ -25,26 +27,38 @@ pipeline {
                 // -Dsonar.login=$SONAR_TOKEN
                 // '''
 
+                // Copying .war file to current dir
                 sh 'cp /var/lib/jenkins/workspace/docker-tomcat/demo/demo/target/*.war .'
                 sh 'ls -l'
 
                 sh''' 
                 cat Dockerfile.tomcat
-                docker build -f Dockerfile.tomcate -t my-tomcat-app .
+                docker build -f Dockerfile.tomcat -t $DOCKER_IMAGE_NAME .
                 '''
             }
         }
         stage('Deploy') {
             steps {
                 script {
-                    def containerRunning = sh(script: 'docker ps -q --filter "name=my-tomcat-app"', returnStdout: true).trim()
+                    def containerRunning = sh(script: 'docker ps -q --filter "name=$DOCKER_CONTAINER_NAME"', returnStdout: true).trim()
                     if (containerRunning) {
                         echo 'Container is running. Stopping and removing it...'
-                        sh 'docker stop my-tomcat-app'
-                        sh 'docker rm my-tomcat-app'
+                        sh 'docker stop $DOCKER_CONTAINER_NAME'
+                        sh 'docker rm $DOCKER_CONTAINER_NAME'
                     }
                     echo 'Starting a new container...'
-                    sh 'docker run -d -p 8090:8080 --name my-tomcat-app my-tomcat-app'
+                    sh 'docker run -d -p 8090:8080 --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE_NAME'
+                }
+            }
+        }
+
+        stage('Pushing image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        docker login -u $DOCKER_USER -p $DOCKER_PASS
+                        docker push $DOCKER_IMAGE_NAME
+                    '''
                 }
             }
         }

@@ -6,7 +6,6 @@ pipeline {
                 docker { image 'kapil0123/git' }
             }
             steps {
-                // git url: 'https://github.com/your-username/your-repo.git'
                 git 'https://github.com/Kapil987/test_maven.git'
             }
         }

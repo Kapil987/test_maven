@@ -1,5 +1,9 @@
-FROM alpine:latest
+FROM docker:dind
 
-RUN apk add --no-cache git openssh-client
+# Install Git and Maven
+RUN apk update && \
+    apk add git && \
+    apk add maven
 
-CMD ["/bin/sh"]
+# Set a shell as the default command
+CMD ["sh"]
