@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk21'
+        maven 'mvn-3.9'
+    }
+    environment { SONAR_TOKEN = credentials('sonar_token') }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                sh 'java --version'
+                sh 'mvn --version'
+                git 'https://github.com/Kapil987/test_maven.git'
+                
+                sh 'ls -l'
+                
+                
+                
+                sh '''
+                mvn -f demo/demo/pom.xml verify package sonar:sonar \
+                -Dsonar.host.url=https://sonarcloud.io/ \
+                -Dsonar.organization=demo-987 \
+                -Dsonar.projectKey=demo-987_demo-name \
+                -Dsonar.login=$SONAR_TOKEN
+                '''
+
+                sh 'cp /var/lib/jenkins/workspace/docker-tomcat/demo/demo/target/*.war .'
+                
+                sh''' 
+                cat Dockerfile.tomcat
+                docker build -f Dockerfile.tomcate -t my-tomcat-app .
+                '''
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    def containerRunning = sh(script: 'docker ps -q --filter "name=my-tomcat-app"', returnStdout: true).trim()
+                    if (containerRunning) {
+                        echo 'Container is running. Stopping and removing it...'
+                        sh 'docker stop my-tomcat-app'
+                        sh 'docker rm my-tomcat-app'
+                    }
+                    echo 'Starting a new container...'
+                    sh 'docker run -d -p 8090:8080 --name my-running-app my-tomcat-app'
+                }
+            }
+        }
+    }
+}
