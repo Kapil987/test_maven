@@ -44,7 +44,7 @@ pipeline {
                         sh 'docker rm my-tomcat-app'
                     }
                     echo 'Starting a new container...'
-                    sh 'docker run -d -p 8090:8080 --name my-running-app my-tomcat-app'
+                    sh 'docker run -d -p 8090:8080 --name my-tomcat-app my-tomcat-app'
                 }
             }
         }
