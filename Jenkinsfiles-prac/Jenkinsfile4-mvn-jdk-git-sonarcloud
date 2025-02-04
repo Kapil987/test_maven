@@ -52,6 +52,19 @@ pipeline {
             }
         }
 
+        stage('Check Website Status') { 
+            steps { 
+                script { 
+                    def statusCode = sh(returnStdout: true, script: 'curl -o /dev/null -s -w "%{http_code}\n" https://google.com').trim() 
+                    if (statusCode == '200' || statusCode == '301') { 
+                        echo 'Website deployed successfully' } 
+                    else { 
+                        error('Website deployment failed') 
+                    } 
+                 } 
+            } 
+        }
+
         stage('Pushing image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {

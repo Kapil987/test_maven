@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: 'MY_VARIABLE', description: 'A variable passed from the upstream pipeline')
+        booleanParam(name: 'DEBUG_MODE', description: 'Enable debug mode')
+    }
+    stages {
+        stage('Use Variable') {
+            steps {
+                echo "MY_VARIABLE: ${params.MY_VARIABLE}"
+                echo "DEBUG_MODE: ${params.DEBUG_MODE}"
+                // Use the parameters in your downstream pipeline
+                script {
+                  if (params.DEBUG_MODE) {
+                    echo "Debug mode is enabled."
+                  }
+                }
+            }
+        }
+    }
+}

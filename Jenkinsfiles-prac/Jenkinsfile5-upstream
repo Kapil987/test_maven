@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build Upstream') {
+            steps {
+                script {
+                    def myVariable = "Hello from Upstream!"
+                    build job: 'downstream-var1', parameters: [
+                        string(name: 'MY_VARIABLE', value: myVariable),
+                        booleanParam(name: 'DEBUG_MODE', value: true),
+                        // other parameter types as needed (choice, etc.)
+                    ]
+                }
+            }
+        }
+    }
+}
