@@ -1,0 +1,42 @@
+pipeline {
+  agent any
+  tools {
+        jdk 'jdk21'
+        maven 'mvn-3.9'
+    }
+  stages {
+    stage('Clone Repository') {
+            steps {
+                sh 'java --version'
+                sh 'mvn --version'
+                git 'https://github.com/Kapil987/test_maven.git'
+                
+                sh 'ls -l'
+                
+                // sh '''
+                // mvn -f demo/demo/pom.xml verify package sonar:sonar \
+                // -Dsonar.host.url=https://sonarcloud.io/ \
+                // -Dsonar.organization=demo-987 \
+                // -Dsonar.projectKey=demo-987_demo-name \
+                // -Dsonar.login=$SONAR_TOKEN
+                // '''
+
+                // Copying .war file to current dir
+                // sh 'cp /var/lib/jenkins/workspace/docker-tomcat/demo/demo/target/*.war .'
+                // sh 'ls -l'
+
+                // sh''' 
+                // cat Dockerfile.tomcat
+                // docker build -f Dockerfile.tomcat -t $DOCKER_IMAGE_NAME .
+                // '''
+            }
+        }
+    stage('Build and Deploy') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+          sh 'mvn -f demo/demo/pom.xml clean deploy -Dusername=$NEXUS_USERNAME -Dpassword=$NEXUS_PASSWORD'
+        }
+      }
+    }
+  }
+}
