@@ -112,6 +112,24 @@ In your `pom.xml` file, include the following information:
 
 ## Nexus Authentication using `settings.xml` 🔑
 
+2. Ensure settings.xml is in the Correct Location
+Inside the container, confirm:
+
+```sh
+ls -la /root/.m2/settings.xml
+```
+If missing, move it:
+
+```sh
+mkdir -p /root/.m2
+cp settings.xml /root/.m2/settings.xml
+```
+OR
+we can use below command to give a custom path for our settings.xml
+```sh
+mvn -s /path/to/custom/settings.xml clean deploy
+```
+
 To authenticate with Nexus using a `settings.xml` file, include the following configuration:
 
 ```xml
@@ -244,9 +262,18 @@ Now you can start and stop Nexus as a service.
 
 ---
 
-## Additional Information ℹ️
+## Troubleshooting ℹ️
+1) Error : [ERROR] Failed to execute goal org.apache.maven.plugins:maven-deploy-plugin:3.1.3:deploy (default-deploy) on project demo: Failed to retrieve remote metadata com.example:demo:0.0.1-SNAPSHOT/maven-metadata.xml: Could not transfer metadata com.example:demo:0.0.1-SNAPSHOT/maven-metadata.xml from/to maven-snapshots (http://54.90.193.140:8081/repository/maven-snapshots/): status code: 401, reason phrase: Unauthorized (401) -> [Help 1]
 
-For detailed explanations and configurations, refer to the comments in the provided code snippets. Ensure that you replace placeholder values (like IP addresses and usernames) with your actual server details.
+Solution: placed settings.xml in /root/.m2 and it worked
+
+2) Error: [WARNING] Ignoring unrecognized line: ?? demo/demo/release.properties
+Solution: 
+```sh
+git status
+git config --global user.email "you@example.com" && git config --global user.name "Your Name"
+```
+Maven's release process (specifically the release:prepare goal) needs a clean Git working directory.  This means there should be no uncommitted changes. 
 
 ---
 

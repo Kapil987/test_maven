@@ -34,7 +34,10 @@ pipeline {
     stage('Build and Deploy') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-          sh 'mvn -f demo/demo/pom.xml clean deploy -Dusername=$NEXUS_USERNAME -Dpassword=$NEXUS_PASSWORD'
+          sh '''
+                sed -i 's/${env.NEXUS_USERNAME}/admin/g' settings.xml
+                mvn -f demo/demo/pom.xml clean deploy
+            '''
         }
       }
     }
