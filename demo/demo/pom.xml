@@ -33,7 +33,7 @@
     <java.version>21</java.version>
 
     <!-- CHANGE HERE to your team's Nexus server -->
-    <nexus.url>http://3.85.144.122:8081</nexus.url>
+    <nexus.url>http://35.175.240.55:8081</nexus.url>
 
     <!-- CHANGE HERE to your team's Nexus repository IDs -->
     <release.repo.id>maven-releases</release.repo.id>

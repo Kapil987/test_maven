@@ -262,6 +262,15 @@ Now you can start and stop Nexus as a service.
 
 ---
 
+## MVN release
+```sh
+mvn help:effective-pom # merges all pom and provide output
+
+mvn release:clean
+mvn release:prepare -B
+mvn release:perform -B
+
+```
 ## Troubleshooting ℹ️
 1) Error : [ERROR] Failed to execute goal org.apache.maven.plugins:maven-deploy-plugin:3.1.3:deploy (default-deploy) on project demo: Failed to retrieve remote metadata com.example:demo:0.0.1-SNAPSHOT/maven-metadata.xml: Could not transfer metadata com.example:demo:0.0.1-SNAPSHOT/maven-metadata.xml from/to maven-snapshots (http://54.90.193.140:8081/repository/maven-snapshots/): status code: 401, reason phrase: Unauthorized (401) -> [Help 1]
 
@@ -275,6 +284,14 @@ git config --global user.email "you@example.com" && git config --global user.nam
 ```
 Maven's release process (specifically the release:prepare goal) needs a clean Git working directory.  This means there should be no uncommitted changes. 
 
+3) Error: [ERROR] The git-tag command failed.
+[ERROR] Command output:
+[ERROR] fatal: tag 'demo-0.0.1' already exists
+
+Solution: remove tag from either local or remote repo
+```sh
+git tag -d demo-0.0.1
+```
 ---
 
 Feel free to explore and adapt the Jenkinsfiles and Nexus configurations to suit your project's needs!
