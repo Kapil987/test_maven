@@ -25,7 +25,7 @@
   </developers>
 
 <scm>
-    <developerConnection>scm:git:git@github.com:Kapil987/test_maven.git</developerConnection>
+    <developerConnection>scm:git:https://${env.GIT_TOKEN}@github.com/Kapil987/test_maven.git</developerConnection>
     <tag>v${project.version}</tag>
 </scm>
 
@@ -100,28 +100,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <!-- added maven profile section -->
-   <profiles>  <profile>
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>  <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </build>
-  </profile>
- </profiles>
 
 </project>
