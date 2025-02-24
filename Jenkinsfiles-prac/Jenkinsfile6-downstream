@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'MY_VARIABLE', description: 'A variable passed from the upstream pipeline')
-        booleanParam(name: 'DEBUG_MODE', description: 'Enable debug mode')
-    }
     stages {
         stage('Use Variable') {
             steps {
