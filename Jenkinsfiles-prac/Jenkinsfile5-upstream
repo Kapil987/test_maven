@@ -1,14 +1,21 @@
 pipeline {
     agent any
+
+    parameters {
+        string(name: 'sampleVariable', defaultValue: 'Default Value', description: 'Sample input from user')
+    }
+
     stages {
         stage('Build Upstream') {
             steps {
                 script {
                     def myVariable = "Hello from Upstream!"
-                    build job: 'downstream-var1', parameters: [
+                    def anotherVariable = params.sampleVariable ?: "Fallback Value"
+
+                    build job: 'downstream1', parameters: [
                         string(name: 'MY_VARIABLE', value: myVariable),
-                        booleanParam(name: 'DEBUG_MODE', value: true),
-                        // other parameter types as needed (choice, etc.)
+                        string(name: 'ANOTHER_VARIABLE', value: anotherVariable),
+                        booleanParam(name: 'DEBUG_MODE', value: true)
                     ]
                 }
             }
