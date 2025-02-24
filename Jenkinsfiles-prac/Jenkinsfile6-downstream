@@ -9,6 +9,7 @@ pipeline {
             steps {
                 echo "MY_VARIABLE: ${params.MY_VARIABLE}"
                 echo "DEBUG_MODE: ${params.DEBUG_MODE}"
+                echo "ANOTHER_VARIABLE : ${params.ANOTHER_VARIABLE}"
                 // Use the parameters in your downstream pipeline
                 script {
                   if (params.DEBUG_MODE) {
